@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Setup Canteen Menu Optimizer",
+			"type": "shell",
+			"command": "python -m venv venv && .\\venv\\Scripts\\activate && pip install pandas numpy scikit-learn xgboost fastapi uvicorn python-multipart && python src\\generate_synthetic_data.py && python src\\data_preprocessing.py && python src\\train_ml_model.py && python src\\rl_agent.py",
+			"group": "build",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"isBackground": false
+		}
+	]
+}
