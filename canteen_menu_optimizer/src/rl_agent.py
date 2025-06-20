@@ -4,6 +4,7 @@ import pandas as pd
 import random
 from collections import defaultdict
 import joblib
+import os
 
 class QLearningAgent:
     def __init__(self, state_size, action_size, learning_rate=0.1, discount_factor=0.99, epsilon=1.0, epsilon_decay_rate=0.001, min_epsilon=0.01):
@@ -49,8 +50,11 @@ class QLearningAgent:
 
 if __name__ == '__main__':
     from canteen_env import CanteenEnv
-
-    env = CanteenEnv("canteen_menu_optimizer/data/historical_sales.csv")
+    
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data_path = os.path.join(base_dir, "data/historical_sales.csv")
+    
+    env = CanteenEnv(data_path)
     state_size = env.get_state_space_size()
     action_size = env.get_action_space_size()
 
@@ -71,5 +75,7 @@ if __name__ == '__main__':
 
         print(f"Episode {episode + 1}: Total Reward = {total_reward}")
 
-    agent.save_model("canteen_menu_optimizer/models/rl_q_table.pkl")
+    models_dir = os.path.join(base_dir, 'models')
+    os.makedirs(models_dir, exist_ok=True)
+    agent.save_model(os.path.join(models_dir, "rl_q_table.pkl"))
     print("RL Q-table saved.")

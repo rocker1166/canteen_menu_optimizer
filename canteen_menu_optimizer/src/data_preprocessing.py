@@ -2,6 +2,8 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+import os
+import joblib
 
 def preprocess_data(sales_path, weather_path, calendar_path):
     sales_df = pd.read_csv(sales_path)
@@ -56,9 +58,10 @@ def preprocess_data(sales_path, weather_path, calendar_path):
     return X_scaled_df, y, df, scaler, le_item_id
 
 if __name__ == '__main__':
-    sales_path = 'canteen_menu_optimizer/data/historical_sales.csv'
-    weather_path = 'canteen_menu_optimizer/data/weather_data.csv'
-    calendar_path = 'canteen_menu_optimizer/data/academic_calendar.csv'
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sales_path = os.path.join(base_dir, 'data/historical_sales.csv')
+    weather_path = os.path.join(base_dir, 'data/weather_data.csv')
+    calendar_path = os.path.join(base_dir, 'data/academic_calendar.csv')
 
     X, y, df_full, scaler, le_item_id = preprocess_data(sales_path, weather_path, calendar_path)
     print("Data preprocessing complete. Shape of features:", X.shape)
@@ -66,16 +69,17 @@ if __name__ == '__main__':
     print("First 5 rows of target:\n", y.head())
 
     # Save scaler and label encoder for later use in prediction
-    import joblib
-    joblib.dump(scaler, 'canteen_menu_optimizer/models/scaler.pkl')
-    joblib.dump(le_item_id, 'canteen_menu_optimizer/models/le_item_id.pkl')
+    models_dir = os.path.join(base_dir, 'models')
+    os.makedirs(models_dir, exist_ok=True)
+    
+    joblib.dump(scaler, os.path.join(models_dir, 'scaler.pkl'))
+    joblib.dump(le_item_id, os.path.join(models_dir, 'le_item_id.pkl'))
     print("Scaler and LabelEncoder saved.")
 
-
-
-
-    X.to_csv("canteen_menu_optimizer/data/X_preprocessed.csv", index=False)
-    y.to_csv("canteen_menu_optimizer/data/y_target.csv", index=False)
+    # Save preprocessed data
+    data_dir = os.path.join(base_dir, 'data')
+    X.to_csv(os.path.join(data_dir, 'X_preprocessed.csv'), index=False)
+    y.to_csv(os.path.join(data_dir, 'y_target.csv'), index=False)
     print("Preprocessed features (X) and target (y) saved to CSV.")
 
 

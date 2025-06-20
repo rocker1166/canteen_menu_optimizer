@@ -2,12 +2,16 @@
 import pandas as pd
 import xgboost as xgb
 import joblib
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
+# Get base directory
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Load preprocessed data
-X = pd.read_csv("canteen_menu_optimizer/data/X_preprocessed.csv")
-y = pd.read_csv("canteen_menu_optimizer/data/y_target.csv").squeeze("columns")
+X = pd.read_csv(os.path.join(base_dir, "data/X_preprocessed.csv"))
+y = pd.read_csv(os.path.join(base_dir, "data/y_target.csv")).squeeze("columns")
 
 # Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -32,7 +36,9 @@ rmse = mse**0.5
 print(f"XGBoost Model RMSE: {rmse:.2f}")
 
 # Save the trained model
-joblib.dump(model, "canteen_menu_optimizer/models/xgboost_model.pkl")
+models_dir = os.path.join(base_dir, 'models')
+os.makedirs(models_dir, exist_ok=True)
+joblib.dump(model, os.path.join(models_dir, "xgboost_model.pkl"))
 print("XGBoost model trained and saved to xgboost_model.pkl")
 
 

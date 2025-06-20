@@ -1,6 +1,7 @@
 
 import numpy as np
 import pandas as pd
+import os
 
 class CanteenEnv:
     def __init__(self, historical_data_path):
