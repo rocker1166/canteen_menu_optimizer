@@ -52,30 +52,37 @@ if __name__ == '__main__':
     from canteen_env import CanteenEnv
     
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data_path = os.path.join(base_dir, "data/historical_sales.csv")
+    sales_path = os.path.join(base_dir, "data/historical_sales.csv")
+    operational_path = os.path.join(base_dir, "data/operational_data.csv")
+    weather_path = os.path.join(base_dir, "data/weather_data.csv")
     
-    env = CanteenEnv(data_path)
+    env = CanteenEnv(sales_path, operational_path, weather_path)
     state_size = env.get_state_space_size()
     action_size = env.get_action_space_size()
+    
+    print(f"Enhanced RL Environment - State size: {state_size}, Action size: {action_size}")
 
-    agent = QLearningAgent(state_size, action_size)
+    agent = QLearningAgent(state_size, action_size, epsilon=0.9, epsilon_decay_rate=0.005)
 
-    episodes = 100
+    episodes = 150  # More episodes for the more complex environment
     for episode in range(episodes):
         state = env.reset()
         done = False
         total_reward = 0
+        steps = 0
 
-        while not done:
+        while not done and steps < 1000:  # Add step limit to prevent infinite loops
             action = agent.choose_action(state)
             next_state, reward, done, _ = env.step(action)
             agent.learn(state, action, reward, next_state, done)
             state = next_state
             total_reward += reward
+            steps += 1
 
-        print(f"Episode {episode + 1}: Total Reward = {total_reward}")
+        if episode % 10 == 0:
+            print(f"Episode {episode + 1}: Total Reward = {total_reward:.2f}, Steps = {steps}, Epsilon = {agent.epsilon:.3f}")
 
     models_dir = os.path.join(base_dir, 'models')
     os.makedirs(models_dir, exist_ok=True)
-    agent.save_model(os.path.join(models_dir, "rl_q_table.pkl"))
-    print("RL Q-table saved.")
+    agent.save_model(os.path.join(models_dir, "enhanced_rl_q_table.pkl"))
+    print("Enhanced RL Q-table saved.")
