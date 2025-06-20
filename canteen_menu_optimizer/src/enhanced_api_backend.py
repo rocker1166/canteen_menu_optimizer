@@ -1,8 +1,11 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional
 from datetime import date
 import logging
+import os
 
 from .enhanced_decision_engine import predict_quantity
 
@@ -11,6 +14,20 @@ app = FastAPI(
     description="AI-powered canteen menu optimization with enhanced features including weather, operational context, and advanced ML/RL models",
     version="2.0.0"
 )
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins for development
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all methods
+    allow_headers=["*"],  # Allow all headers
+)
+
+# Mount static files (web UI)
+static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "web_ui")
+if os.path.exists(static_path):
+    app.mount("/ui", StaticFiles(directory=static_path, html=True), name="static")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

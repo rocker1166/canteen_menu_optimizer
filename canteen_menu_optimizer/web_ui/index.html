@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Canteen Menu Optimizer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-utensils"></i> Enhanced Canteen Menu Optimizer</h1>
+            <p>AI-powered menu optimization with weather, operational, and academic context</p>
+        </header>
+
+        <main class="main-content">
+            <!-- API Status Section -->
+            <section class="status-section">
+                <div class="status-card">
+                    <h3><i class="fas fa-heartbeat"></i> API Status</h3>
+                    <div id="api-status" class="status-indicator">
+                        <span class="status-dot checking"></span>
+                        <span>Checking...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prediction Form Section -->
+            <section class="prediction-section">
+                <div class="card">
+                    <h2><i class="fas fa-chart-line"></i> Get Quantity Prediction</h2>
+                    <form id="prediction-form" class="prediction-form">
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="item-id">Menu Item:</label>
+                            <select id="item-id" name="item_id" required>
+                                <option value="">Select an item...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="current-stock">Current Stock (optional):</label>
+                                <input type="number" id="current-stock" name="current_stock" min="0" placeholder="50">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="student-count">Student Count (optional):</label>
+                                <input type="number" id="student-count" name="student_count" min="0" placeholder="280">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rainfall">Rainfall Today (mm):</label>
+                                <input type="number" id="rainfall" name="rainfall_today" min="0" step="0.1" placeholder="0.0">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="event-today">Event Today:</label>
+                                <select id="event-today" name="event_today">
+                                    <option value="0">No Event</option>
+                                    <option value="1">Event Today</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-predict">
+                            <i class="fas fa-magic"></i> Get Prediction
+                        </button>
+                    </form>
+
+                    <!-- Results Section -->
+                    <div id="prediction-result" class="result-section" style="display: none;">
+                        <h3><i class="fas fa-bullseye"></i> Prediction Result</h3>
+                        <div class="result-card">
+                            <div class="result-item">
+                                <span class="label">Item:</span>
+                                <span id="result-item" class="value"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Predicted Quantity:</span>
+                                <span id="result-quantity" class="value highlight"></span>
+                            </div>
+                            <div class="result-item">
+                                <span class="label">Model Version:</span>
+                                <span id="result-version" class="value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Menu Items Section -->
+            <section class="menu-section">
+                <div class="card">
+                    <h2><i class="fas fa-list"></i> Available Menu Items</h2>
+                    <div id="menu-items" class="menu-grid">
+                        <!-- Menu items will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Model Info Section -->
+            <section class="model-info-section">
+                <div class="card">
+                    <h2><i class="fas fa-cog"></i> Model Information</h2>
+                    <div id="model-info" class="model-info-content">
+                        <!-- Model info will be loaded here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Enhanced Canteen Menu Optimizer - AI-Powered Food Prediction</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
